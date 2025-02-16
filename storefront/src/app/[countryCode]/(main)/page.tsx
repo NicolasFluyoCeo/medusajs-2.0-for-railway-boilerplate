@@ -6,6 +6,8 @@ import BestSellerSection from "@modules/home/components/best-sellet-section"
 import TrainingAd from "@modules/home/components/ad"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import NewCollection from "@modules/home/components/ new-collection"
+import { getCollectionByHandle } from "@lib/data/collections"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -18,18 +20,18 @@ export default async function Home({
 }: {
   params: { countryCode: string }
 }) {
-.022
+  const region = await getRegion(countryCode)
+  const collection = await getCollectionByHandle("/new-collection")
 
   return (
     <>
       <Hero />
-      {/* <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
-      </div> */}
+      {region && collection && (
+        <NewCollection collection={collection} region={region} />
+      )}
       <TrainingAd />
       <BestSellerSection />
+ 
     </>
   )
 }
