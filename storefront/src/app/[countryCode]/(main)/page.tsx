@@ -2,7 +2,6 @@ import { Metadata } from "next"
 
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
-import BestSellerSection from "@modules/home/components/best-sellet-section"
 import TrainingAd from "@modules/home/components/ad"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
@@ -21,8 +20,9 @@ export default async function Home({
   params: { countryCode: string }
 }) {
   const region = await getRegion(countryCode)
-  const collection = await getCollectionByHandle("/new-collection")
-
+  console.log('Region ave:', region)
+  const collection = await getCollectionByHandle("new-collection")
+  console.log('Collection aves:', collection)
   return (
     <>
       <Hero />
@@ -30,8 +30,6 @@ export default async function Home({
         <NewCollection collection={collection} region={region} />
       )}
       <TrainingAd />
-      <BestSellerSection />
- 
     </>
   )
 }
