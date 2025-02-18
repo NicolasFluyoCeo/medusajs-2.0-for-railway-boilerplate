@@ -1,58 +1,43 @@
 import { Text } from "@medusajs/ui"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import ProductPreview from "@modules/products/components/product-preview"
-import { getProductsList } from "@lib/data/products"
-import { getProductPrice } from "@lib/util/get-product-price"
+import { getProductByHandle } from "@lib/data/products"
 
 export default async function BotSection({
-  collection,
   region,
 }: {
-  collection: HttpTypes.StoreCollection | null
   region: HttpTypes.StoreRegion
 }) {
-  let products = collection?.products
+  // Obtener los productos por sus handles
+  const glove1 = await getProductByHandle("g01", region.id)
+  const glove2 = await getProductByHandle("g02", region.id)
+  const glove3 = await getProductByHandle("g03", region.id)
 
-
-  if ((!products || products.length === 0) && collection?.id) {
-    const { response } = await getProductsList({
-      queryParams: { collection_id: [collection.id] } as any,
-      countryCode: region.iso_2
-    })
-    products = response.products
-  }
+  const gloves = [glove1, glove2, glove3].filter(Boolean)
 
   return (
     <div className="content-container py-12 small:py-24">
-      <div className="flex justify-between mb-8">
-        <Text className="text-4xl font-normal">Goalkeeper Gloves Collection</Text>
-        {collection && (
+      <div className="grid grid-cols-3 gap-4">
+        {gloves.map((glove) => (
           <LocalizedClientLink 
-            href={`/collections/${collection.handle}`}
-            className="px-4 py-2 rounded-full border border-gray-200 text-sm hover:bg-gray-50"
+            key={glove.id}
+            href={`/products/${glove.handle}`}
+            className="relative group h-[300px] overflow-hidden"
           >
-            View All
-          </LocalizedClientLink>
-        )}
-      </div>
-      <ul className="grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-8">
-        {products?.map((product) => {
-          const { cheapestPrice } = getProductPrice({ product })
-          
-          return (
-            <li key={product.id}>
-              <div>
-                <ProductPreview 
-                  product={product} 
-                  region={region} 
-                  isFeatured
-                />
+            <div className="w-full h-full">
+              <img
+                src={glove.thumbnail || ""}
+                alt={glove.title}
+                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/20 flex flex-col justify-end p-4">
+                <h3 className="text-white text-xl font-bold">{glove.title}</h3>
+                <p className="text-white/90">{glove.description?.split('.')[0]}</p>
               </div>
-            </li>
-          )
-        })}
-      </ul>
+            </div>
+          </LocalizedClientLink>
+        ))}
+      </div>
     </div>
   )
 }
