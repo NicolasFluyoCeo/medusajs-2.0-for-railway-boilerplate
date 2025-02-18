@@ -6,10 +6,11 @@ import { getRegion } from "@lib/data/regions"
 import { getCollectionByHandle } from "@lib/data/collections"
 import NewCollection from "@modules/home/components/new-collection"
 import BotSection from "@modules/home/components/bot-section"
+import HorizontalProducts from "@modules/home/components/horizontal"
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "Soccer Gloves",
   description:
-    "A performant frontend ecommerce starter template with Next.js 14 and Medusa.",
+    "Soccer Gloves is a soccer store that sells soccer gloves,, and soccer equipment",
 }
 
 export default async function Home({
@@ -26,6 +27,7 @@ export default async function Home({
       {region && collection && (
         <NewCollection collection={collection} region={region} />
       )}
+      <HorizontalProducts region={region} />
       <TrainingAd />
       {region && botCollection && (
         <BotSection collection={botCollection} region={region} />
