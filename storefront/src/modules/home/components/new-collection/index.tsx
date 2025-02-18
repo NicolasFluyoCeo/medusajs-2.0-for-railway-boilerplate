@@ -48,13 +48,6 @@ export default async function NewCollection({
                   region={region} 
                   isFeatured
                 />
-                <div className="mt-2">
-                  <Text className="text-base">{product.title}</Text>
-                  <Text className="text-sm text-gray-500">{product.description}</Text>
-                  <Text className="text-base mt-1">
-                    {cheapestPrice?.calculated_price}
-                  </Text>
-                </div>
               </div>
             </li>
           )
