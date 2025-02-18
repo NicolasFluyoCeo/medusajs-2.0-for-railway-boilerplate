@@ -1,4 +1,3 @@
-import { Text } from "@medusajs/ui"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { getProductByHandle } from "@lib/data/products"
@@ -17,24 +16,18 @@ export default async function BotSection({
 
   return (
     <div className="content-container py-12 small:py-24">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[600px]">
         {gloves.map((glove) => (
           <LocalizedClientLink 
             key={glove.id}
             href={`/products/${glove.handle}`}
-            className="relative group h-[300px] overflow-hidden"
+            className="relative group w-full h-full"
           >
-            <div className="w-full h-full">
-              <img
-                src={glove.thumbnail || ""}
-                alt={glove.title}
-                className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/20 flex flex-col justify-end p-4">
-                <h3 className="text-white text-xl font-bold">{glove.title}</h3>
-                <p className="text-white/90">{glove.description?.split('.')[0]}</p>
-              </div>
-            </div>
+            <img
+              src={glove.thumbnail || ""}
+              alt={glove.title}
+              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+            />
           </LocalizedClientLink>
         ))}
       </div>
