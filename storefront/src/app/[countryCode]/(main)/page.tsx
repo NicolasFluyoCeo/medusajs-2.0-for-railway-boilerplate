@@ -5,7 +5,7 @@ import TrainingAd from "@modules/home/components/ad"
 import { getRegion } from "@lib/data/regions"
 import { getCollectionByHandle } from "@lib/data/collections"
 import NewCollection from "@modules/home/components/new-collection"
-
+import BotSection from "@modules/home/components/bot-section"
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
   description:
@@ -19,7 +19,7 @@ export default async function Home({
 }) {
   const region = await getRegion(countryCode)
   const collection = await getCollectionByHandle("new-collection")
-
+  const botCollection = await getCollectionByHandle("bot-section")
   return (
     <>
       <Hero />
@@ -27,6 +27,9 @@ export default async function Home({
         <NewCollection collection={collection} region={region} />
       )}
       <TrainingAd />
+      {region && botCollection && (
+        <BotSection collection={botCollection} region={region} />
+      )}
     </>
   )
 }
