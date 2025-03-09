@@ -16,11 +16,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
     {
       label: "Product Information",
       component: <ProductInfoTab product={product} />,
-    },
-    {
-      label: "Shipping & Returns",
-      component: <ShippingInfoTab />,
-    },
+    }
   ]
 
   return (
@@ -44,35 +40,41 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
   return (
     <div className="text-small-regular py-8">
-      <div className="grid grid-cols-2 gap-x-8">
-        <div className="flex flex-col gap-y-4">
-          <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
-          </div>
+      <div className="flex flex-col gap-y-6">
+        <h3 className="font-semibold text-base">GLOVE SIZES</h3>
+        <p className="mb-4">Please measure the circumference of your hand at its widest point (excluding the thumb) to find your perfect size:</p>
+        
+        <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+          <div className="font-semibold">Size</div>
+          <div className="font-semibold">Centimeters</div>
+          <div className="font-semibold">Inches</div>
+          
+          <div>5</div>
+          <div>15.3 - 16.0 cm</div>
+          <div>6.0" - 6.3"</div>
+          
+          <div>6</div>
+          <div>16.1 - 16.8 cm</div>
+          <div>6.3" - 6.6"</div>
+          
+          <div>7</div>
+          <div>16.9 - 17.6 cm</div>
+          <div>6.7" - 6.9"</div>
+          
+          <div>8</div>
+          <div>17.7 - 18.4 cm</div>
+          <div>7.0" - 7.2"</div>
+          
+          <div>9</div>
+          <div>18.5 - 19.2 cm</div>
+          <div>7.3" - 7.6"</div>
+          
+          <div>10</div>
+          <div>19.3 - 20.0 cm</div>
+          <div>7.6" - 7.9"</div>
         </div>
-        <div className="flex flex-col gap-y-4">
-          <div>
-            <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Dimensions</span>
-            <p>
-              {product.length && product.width && product.height
-                ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
-            </p>
-          </div>
-        </div>
+        
+        <p className="mt-2">Measuring tip: Use a soft measuring tape around your dominant hand at its widest point (excluding thumb). If between sizes, we recommend choosing the larger size for a more comfortable fit.</p>
       </div>
     </div>
   )
