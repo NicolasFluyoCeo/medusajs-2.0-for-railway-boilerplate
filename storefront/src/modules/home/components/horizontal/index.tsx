@@ -48,7 +48,7 @@ export default async function HorizontalProducts({
                     {product.title}
                   </span>
                   <span className="text-base-regular text-gray-900">
-                    ${product.variants?.[0]?.calculated_price?.amount || 0}
+                    ${product.variants?.[0]?.calculated_price?.calculated_amount || 0}
                   </span>
                 </div>
               </LocalizedClientLink>
