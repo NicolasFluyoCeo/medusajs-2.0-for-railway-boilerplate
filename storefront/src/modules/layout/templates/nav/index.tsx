@@ -10,8 +10,8 @@ export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
 
   return (
-    <div className="absolute top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto duration-200 bg-transparent backdrop-blur-sm">
+    <div className="fixed top-0 inset-x-0 z-50 group bg-black">
+      <header className="relative h-16 mx-auto">
         <nav className="content-container txt-xsmall-plus text-white flex items-center justify-between w-full h-full text-small-regular">
           {/* Left section - Logo and Categories */}
           <div className="flex items-center h-full gap-x-6">

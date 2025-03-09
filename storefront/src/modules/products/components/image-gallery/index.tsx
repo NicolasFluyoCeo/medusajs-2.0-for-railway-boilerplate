@@ -20,7 +20,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
     <div className="flex flex-col items-start relative gap-y-4">
       {/* Imagen principal */}
       <Container
-        className="relative aspect-[29/34] w-full overflow-hidden bg-ui-bg-subtle"
+        className="relative aspect-[29/34] w-3/4 mx-auto overflow-hidden bg-ui-bg-subtle"
         id={images[selectedImageIndex]?.id}
       >
         {!!images[selectedImageIndex]?.url && (
@@ -40,7 +40,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
 
       {/* Cuadrícula de miniaturas */}
       {images.length > 1 && (
-        <div className="grid grid-cols-4 gap-2 w-full">
+        <div className="grid grid-cols-4 gap-2 w-3/4 mx-auto">
           {images.map((image, index) => {
             return (
               <div
