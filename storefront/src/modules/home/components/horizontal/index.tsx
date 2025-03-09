@@ -11,7 +11,7 @@ export default async function HorizontalProducts({
 }) {
   const { response: { products } } = await getProductsList({
     queryParams: { limit: 10 },
-    countryCode: region.iso_2
+    countryCode: region.countries?.[0]?.iso_2 || "us"
   })
 
   return (
