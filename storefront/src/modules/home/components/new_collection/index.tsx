@@ -32,14 +32,13 @@ export default async function NewCollection({
     <div className="bg-gray-50 py-16">
       <div className="content-container">
         <div className="flex justify-between items-center mb-10">
-          <Heading className="text-3xl font-bold" level="h2">Hurricane New Collection</Heading>
           <div>
-            <Link href={`/collections/${collection.handle}`} className="btn-primary py-2 px-4 rounded-md bg-black text-white font-medium hover:bg-gray-800 inline-flex items-center">
+            {/* <Link href={`/collections/${collection.handle}`} className="btn-primary py-2 px-4 rounded-md bg-black text-white font-medium hover:bg-gray-800 inline-flex items-center">
               Explore all
               <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <ul className="grid grid-cols-1 small:grid-cols-2 medium:grid-cols-3 gap-x-8 gap-y-10">
