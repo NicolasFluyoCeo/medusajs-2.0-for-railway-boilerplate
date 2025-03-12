@@ -58,9 +58,9 @@ export default async function Nav() {
             </div>
             
             {/* Input de búsqueda */}
-            <div className="hidden md:block mr-2">
+            {/* <div className="hidden md:block mr-2">
               <SearchInput />
-            </div>
+            </div> */}
             
             <Suspense
               fallback={
