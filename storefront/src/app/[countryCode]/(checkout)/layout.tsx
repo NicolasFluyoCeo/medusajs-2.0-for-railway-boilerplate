@@ -26,10 +26,10 @@ export default function CheckoutLayout({
           </LocalizedClientLink>
           <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="font-bold text-2xl text-ui-fg-subtle hover:text-ui-fg-base uppercase tracking-wider"
             data-testid="store-link"
           >
-            NG Soccer Gloves
+            <span className="font-extrabold font-serif text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-500 text-2xl tracking-widest hover:scale-105 transition-transform shadow-sm">NG SOCCER GLOVES</span>
           </LocalizedClientLink>
           <div className="flex-1 basis-0" />
         </nav>
