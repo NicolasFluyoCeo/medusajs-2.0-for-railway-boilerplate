@@ -17,6 +17,11 @@
     scrollbar-width: none; /* Firefox */
   }
 
+  /* Clase para utilizar la fuente Kalam */
+  .font-kalam {
+    font-family: var(--font-kalam);
+  }
+
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label {
     @apply -translate-y-2 text-xsmall-regular;

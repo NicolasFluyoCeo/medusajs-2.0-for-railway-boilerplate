@@ -69,6 +69,8 @@ module.exports = {
           "Ubuntu",
           "sans-serif",
         ],
+        montserrat: ["var(--font-montserrat)"],
+        kalam: ["var(--font-kalam)"],
       },
       keyframes: {
         ring: {

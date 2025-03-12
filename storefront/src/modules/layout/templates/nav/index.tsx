@@ -5,6 +5,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 import dynamic from "next/dynamic"
+import { fugazOne } from "app/fonts"
 
 // Importamos el componente de forma dinámica para evitar problemas de SSR
 const SearchInput = dynamic(
@@ -28,7 +29,7 @@ export default async function Nav() {
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus text-white hover:text-gray-300 uppercase"
+              className={`text-3xl md:text-4xl lg:text-4xl text-white hover:text-gray-300 uppercase ${fugazOne.className}`} 
               data-testid="nav-store-link"
             >
               NG Soccer Gloves
