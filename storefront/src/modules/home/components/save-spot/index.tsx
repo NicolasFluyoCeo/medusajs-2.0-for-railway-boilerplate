@@ -20,7 +20,10 @@ const SaveSpot = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          type: 'training',
+          email: email,
+        }),
       });
       
       const result = await response.json();
