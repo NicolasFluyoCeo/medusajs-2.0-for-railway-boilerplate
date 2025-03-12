@@ -28,7 +28,7 @@ export default async function Home({
   return (
     <>
       <Hero />
-      <div className="h-1/2">
+      <div className="py-6">
         <NewCollection countryCode={countryCode} />
       </div>
       <div className="py-12">
