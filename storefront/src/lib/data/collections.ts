@@ -26,6 +26,28 @@ export const getCollectionByHandle = cache(async function (
     .then(({ collections }) => collections[0])
 })
 
+export const getCollectionWithProductsByHandle = cache(
+  async (handle: string, countryCode: string): Promise<HttpTypes.StoreCollection | null> => {
+    const collection = await getCollectionByHandle(handle)
+
+    if (!collection) {
+      return null
+    }
+
+    const { response } = await getProductsList({
+      queryParams: { 
+        id: collection.products?.map(p => p.id) || [],
+      } as any,
+      countryCode,
+    })
+
+    return {
+      ...collection,
+      products: response.products,
+    } as unknown as HttpTypes.StoreCollection
+  }
+)
+
 export const getCollectionsWithProducts = cache(
   async (countryCode: string): Promise<HttpTypes.StoreCollection[] | null> => {
     const { collections } = await getCollectionsList(0, 3)
@@ -39,7 +61,11 @@ export const getCollectionsWithProducts = cache(
       .filter(Boolean) as string[]
 
     const { response } = await getProductsList({
-      queryParams: { collection_id: collectionIds },
+      queryParams: { 
+        id: collections.flatMap(collection => 
+          collection.products?.map(p => p.id) || []
+        ),
+      } as any,
       countryCode,
     })
 
