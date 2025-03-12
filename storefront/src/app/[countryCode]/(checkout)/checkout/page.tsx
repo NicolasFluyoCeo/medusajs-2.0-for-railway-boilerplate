@@ -7,6 +7,7 @@ import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import { enrichLineItems, retrieveCart } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { getCustomer } from "@lib/data/customer"
+import CartDebug from "@modules/checkout/components/cart-debug"
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -36,6 +37,7 @@ export default async function Checkout() {
         <CheckoutForm cart={cart} customer={customer} />
       </Wrapper>
       <CheckoutSummary cart={cart} />
+      {cart && <CartDebug cart={cart} />}
     </div>
   )
 }
