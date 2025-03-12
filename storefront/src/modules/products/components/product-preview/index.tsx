@@ -1,5 +1,3 @@
-"use client"
-
 import { Text } from "@medusajs/ui"
 
 import { getProductPrice } from "@lib/util/get-product-price"
@@ -9,7 +7,7 @@ import PreviewPrice from "./price"
 import { getProductsById } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 
-export default function ProductPreview({
+export default async function ProductPreview({
   product,
   isFeatured,
   region,
