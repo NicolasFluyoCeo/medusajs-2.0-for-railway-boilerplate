@@ -6,18 +6,41 @@ import { Input, Text } from "@medusajs/ui"
 const SaveSpot = () => {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission (e.g., API call to save email)
-    console.log("Email submitted:", email)
-    // Show success message
-    setIsSubmitted(true)
-    // Reset form after a delay
-    setTimeout(() => {
-      setEmail("")
-      setIsSubmitted(false)
-    }, 3000)
+    setIsLoading(true)
+    setError("")
+    
+    try {
+      const response = await fetch('/api/mails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send email');
+      }
+      
+      setIsSubmitted(true)
+      
+      setTimeout(() => {
+        setEmail("")
+        setIsSubmitted(false)
+      }, 3000)
+    } catch (err) {
+      console.error('Error:', err);
+      setError("Failed to send email. Please try again later.");
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
