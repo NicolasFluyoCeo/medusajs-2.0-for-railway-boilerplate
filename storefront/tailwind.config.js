@@ -71,6 +71,9 @@ module.exports = {
         ],
         montserrat: ["var(--font-montserrat)"],
         kalam: ["var(--font-kalam)"],
+        "dancing-script": ["var(--font-dancing-script)"],
+        "kaushan-script": ["var(--font-kaushan-script)"],
+        "fugaz-one": ["var(--font-fugaz-one)"],
       },
       keyframes: {
         ring: {

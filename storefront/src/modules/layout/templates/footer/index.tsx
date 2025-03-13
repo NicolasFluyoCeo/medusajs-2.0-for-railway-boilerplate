@@ -61,8 +61,8 @@ export default async function Footer() {
                   </LocalizedClientLink>
                 </li>
                 <li>
-                  <a href="mailto:info@ngsoccergloves.com" className="text-gray-400 hover:text-white">
-                    info@ngsoccergloves.com
+                  <a href="mailto:ngsoccergloves@gmail.com" className="text-gray-400 hover:text-white">
+                    ngsoccergloves@gmail.com
                   </a>
                 </li>
               </ul>
