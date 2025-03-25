@@ -6,8 +6,8 @@ import { RadioGroup } from "@headlessui/react"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { Button, Container, Heading, Text, Tooltip, clx } from "@medusajs/ui"
-import { CardElement } from "@stripe/react-stripe-js"
-import { StripeCardElementOptions } from "@stripe/stripe-js"
+import { CardElement, PaymentRequestButtonElement, useStripe } from "@stripe/react-stripe-js"
+import { StripeCardElementOptions, PaymentRequest } from "@stripe/stripe-js"
 
 import Divider from "@modules/common/components/divider"
 import PaymentContainer from "@modules/checkout/components/payment-container"
@@ -48,6 +48,9 @@ const Payment = ({
 
   const paymentReady =
     (activeSession && cart?.shipping_methods.length !== 0) || paidByGiftcard
+
+  const stripe = useStripe();
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
     return {
@@ -113,6 +116,27 @@ const Payment = ({
     setError(null)
   }, [isOpen])
 
+  useEffect(() => {
+    if (stripe) {
+      const pr = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: 'Total',
+          amount: cart.total,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      pr.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
+    }
+  }, [stripe, cart.total]);
+
   return (
     <div className="bg-white">
       <div className="flex flex-row items-center justify-between mb-6">
@@ -166,6 +190,15 @@ const Payment = ({
               </RadioGroup>
               {isStripe && stripeReady && (
                 <div className="mt-5 transition-all duration-150 ease-in-out">
+                  {paymentRequest && (
+                    <div className="mb-5">
+                      <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                        Express Checkout:
+                      </Text>
+                      <PaymentRequestButtonElement options={{ paymentRequest }} />
+                    </div>
+                  )}
+                  
                   <Text className="txt-medium-plus text-ui-fg-base mb-1">
                     Enter your card details:
                   </Text>
