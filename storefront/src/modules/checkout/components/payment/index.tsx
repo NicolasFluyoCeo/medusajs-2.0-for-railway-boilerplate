@@ -49,7 +49,7 @@ const Payment = ({
   const paymentReady =
     (activeSession && cart?.shipping_methods.length !== 0) || paidByGiftcard
 
-  const stripe = useStripe();
+  const stripe = stripeReady ? useStripe() : null;
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
@@ -117,13 +117,13 @@ const Payment = ({
   }, [isOpen])
 
   useEffect(() => {
-    if (stripe) {
+    if (stripe && isStripe && stripeReady) {
       const pr = stripe.paymentRequest({
         country: 'US',
-        currency: 'usd',
+        currency: cart.region?.currency_code?.toLowerCase() || 'usd',
         total: {
           label: 'Total',
-          amount: cart.total,
+          amount: cart.total || 0,
         },
         requestPayerName: true,
         requestPayerEmail: true,
@@ -133,9 +133,11 @@ const Payment = ({
         if (result) {
           setPaymentRequest(pr);
         }
+      }).catch(() => {
+        // Silenciar errores de canMakePayment
       });
     }
-  }, [stripe, cart.total]);
+  }, [stripe, isStripe, stripeReady, cart.total, cart.region?.currency_code]);
 
   return (
     <div className="bg-white">
