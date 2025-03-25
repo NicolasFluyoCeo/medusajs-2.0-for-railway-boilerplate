@@ -215,7 +215,7 @@ const Payment = ({
               {isLoading ? (
                 <div className="flex items-center justify-center py-4">
                   <div className="w-8 h-8 border-2 border-ui-border-interactive rounded-full border-t-transparent animate-spin"></div>
-                  <span className="ml-2">Cargando opciones de pago...</span>
+                  <span className="ml-2">Loading payment options...</span>
                 </div>
               ) : error ? (
                 <div className="mb-4">
@@ -228,7 +228,7 @@ const Payment = ({
                       setHasInitiatedPayment(false);
                     }}
                   >
-                    Reintentar
+                    Retry
                   </Button>
                 </div>
               ) : null}
@@ -275,7 +275,7 @@ const Payment = ({
               {!activeSession && !isLoading && !isStripe && (
                 <div className="mb-4">
                   <Text className="mb-2">
-                    Haga clic para mostrar las opciones de pago:
+                    Click to show payment options:
                   </Text>
                   <Button 
                     variant="secondary"
@@ -283,7 +283,7 @@ const Payment = ({
                       setHasInitiatedPayment(false);
                     }}
                   >
-                    Mostrar opciones de pago
+                    Show payment options
                   </Button>
                 </div>
               )}
