@@ -88,23 +88,18 @@ const Payment = ({
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const shouldInputCard =
-        isStripeFunc(selectedPaymentMethod) && !activeSession
-
-      if (!activeSession) {
+      if (!activeSession && isStripeFunc(selectedPaymentMethod)) {
         await initiatePaymentSession(cart, {
           provider_id: selectedPaymentMethod,
         })
       }
 
-      if (!shouldInputCard) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
-          }
-        )
-      }
+      return router.push(
+        pathname + "?" + createQueryString("step", "review"),
+        {
+          scroll: false,
+        }
+      )
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -148,6 +143,37 @@ const Payment = ({
       setSelectedPaymentMethod(stripeMethod.id);
     }
   }, [availablePaymentMethods, selectedPaymentMethod]);
+
+  useEffect(() => {
+    const shouldInitiate = isOpen && 
+      availablePaymentMethods?.length > 0 && 
+      !activeSession && 
+      !isLoading;
+    
+    if (shouldInitiate) {
+      const initializePayment = async () => {
+        setIsLoading(true);
+        try {
+          const stripeMethod = availablePaymentMethods.find(
+            (method) => isStripeFunc(method.id)
+          );
+          
+          if (stripeMethod) {
+            setSelectedPaymentMethod(stripeMethod.id);
+            await initiatePaymentSession(cart, {
+              provider_id: stripeMethod.id,
+            });
+          }
+        } catch (err: any) {
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      initializePayment();
+    }
+  }, [isOpen, availablePaymentMethods, activeSession, isLoading, cart]);
 
   return (
     <div className="bg-white">
@@ -274,9 +300,7 @@ const Payment = ({
             }
             data-testid="submit-payment-button"
           >
-            {!activeSession && isStripeFunc(selectedPaymentMethod)
-              ? " Enter card details"
-              : "Continue to review"}
+            Continue to review
           </Button>
         </div>
 
