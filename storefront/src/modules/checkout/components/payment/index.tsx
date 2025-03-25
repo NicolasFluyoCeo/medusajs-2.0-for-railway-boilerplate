@@ -139,6 +139,16 @@ const Payment = ({
     }
   }, [stripe, isStripe, stripeReady, cart.total, cart.region?.currency_code]);
 
+  useEffect(() => {
+    const stripeMethod = availablePaymentMethods.find(
+      (method) => isStripeFunc(method.id)
+    );
+    
+    if (stripeMethod && !selectedPaymentMethod) {
+      setSelectedPaymentMethod(stripeMethod.id);
+    }
+  }, [availablePaymentMethods, selectedPaymentMethod]);
+
   return (
     <div className="bg-white">
       <div className="flex flex-row items-center justify-between mb-6">
@@ -171,25 +181,6 @@ const Payment = ({
         <div className={isOpen ? "block" : "hidden"}>
           {!paidByGiftcard && availablePaymentMethods?.length && (
             <>
-              <RadioGroup
-                value={selectedPaymentMethod}
-                onChange={(value: string) => setSelectedPaymentMethod(value)}
-              >
-                {availablePaymentMethods
-                  .sort((a, b) => {
-                    return a.provider_id > b.provider_id ? 1 : -1
-                  })
-                  .map((paymentMethod) => {
-                    return (
-                      <PaymentContainer
-                        paymentInfoMap={paymentInfoMap}
-                        paymentProviderId={paymentMethod.id}
-                        key={paymentMethod.id}
-                        selectedPaymentOptionId={selectedPaymentMethod}
-                      />
-                    )
-                  })}
-              </RadioGroup>
               {isStripe && stripeReady && (
                 <div className="mt-5 transition-all duration-150 ease-in-out">
                   {paymentRequest && (
@@ -197,7 +188,17 @@ const Payment = ({
                       <Text className="txt-medium-plus text-ui-fg-base mb-1">
                         Express Checkout:
                       </Text>
-                      <PaymentRequestButtonElement options={{ paymentRequest }} />
+                      <PaymentRequestButtonElement 
+                        options={{ 
+                          paymentRequest,
+                          style: {
+                            paymentRequestButton: {
+                              type: 'buy',
+                              theme: 'dark'
+                            }
+                          }
+                        }} 
+                      />
                     </div>
                   )}
                   
@@ -218,6 +219,28 @@ const Payment = ({
                   />
                 </div>
               )}
+              
+              <div className="hidden">
+                <RadioGroup
+                  value={selectedPaymentMethod}
+                  onChange={(value: string) => setSelectedPaymentMethod(value)}
+                >
+                  {availablePaymentMethods
+                    .sort((a, b) => {
+                      return a.provider_id > b.provider_id ? 1 : -1
+                    })
+                    .map((paymentMethod) => {
+                      return (
+                        <PaymentContainer
+                          paymentInfoMap={paymentInfoMap}
+                          paymentProviderId={paymentMethod.id}
+                          key={paymentMethod.id}
+                          selectedPaymentOptionId={selectedPaymentMethod}
+                        />
+                      )
+                    })}
+                </RadioGroup>
+              </div>
             </>
           )}
 
