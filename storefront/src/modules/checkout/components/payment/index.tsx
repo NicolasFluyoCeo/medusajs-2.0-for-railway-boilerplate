@@ -33,6 +33,7 @@ const Payment = ({
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     activeSession?.provider_id ?? ""
   )
+  const [hasInitiatedPayment, setHasInitiatedPayment] = useState(false)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -148,11 +149,13 @@ const Payment = ({
     const shouldInitiate = isOpen && 
       availablePaymentMethods?.length > 0 && 
       !activeSession && 
-      !isLoading;
+      !isLoading &&
+      !hasInitiatedPayment;
     
     if (shouldInitiate) {
       const initializePayment = async () => {
         setIsLoading(true);
+        setHasInitiatedPayment(true);
         try {
           const stripeMethod = availablePaymentMethods.find(
             (method) => isStripeFunc(method.id)
@@ -165,7 +168,9 @@ const Payment = ({
             });
           }
         } catch (err: any) {
+          console.error("Error initializing payment:", err);
           setError(err.message);
+          setHasInitiatedPayment(false);
         } finally {
           setIsLoading(false);
         }
@@ -173,7 +178,7 @@ const Payment = ({
       
       initializePayment();
     }
-  }, [isOpen, availablePaymentMethods, activeSession, isLoading, cart]);
+  }, [isOpen, availablePaymentMethods, activeSession, isLoading, hasInitiatedPayment]);
 
   return (
     <div className="bg-white">
@@ -207,7 +212,28 @@ const Payment = ({
         <div className={isOpen ? "block" : "hidden"}>
           {!paidByGiftcard && availablePaymentMethods?.length && (
             <>
-              {isStripe && stripeReady && (
+              {isLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-8 h-8 border-2 border-ui-border-interactive rounded-full border-t-transparent animate-spin"></div>
+                  <span className="ml-2">Cargando opciones de pago...</span>
+                </div>
+              ) : error ? (
+                <div className="mb-4">
+                  <ErrorMessage error={error} />
+                  <Button 
+                    variant="secondary"
+                    className="mt-4"
+                    onClick={() => {
+                      setError(null);
+                      setHasInitiatedPayment(false);
+                    }}
+                  >
+                    Reintentar
+                  </Button>
+                </div>
+              ) : null}
+
+              {!isLoading && isStripe && stripeReady && (
                 <div className="mt-5 transition-all duration-150 ease-in-out">
                   {paymentRequest && (
                     <div className="mb-5">
@@ -243,6 +269,22 @@ const Payment = ({
                       setCardComplete(e.complete)
                     }}
                   />
+                </div>
+              )}
+              
+              {!activeSession && !isLoading && !isStripe && (
+                <div className="mb-4">
+                  <Text className="mb-2">
+                    Haga clic para mostrar las opciones de pago:
+                  </Text>
+                  <Button 
+                    variant="secondary"
+                    onClick={() => {
+                      setHasInitiatedPayment(false);
+                    }}
+                  >
+                    Mostrar opciones de pago
+                  </Button>
                 </div>
               )}
               
