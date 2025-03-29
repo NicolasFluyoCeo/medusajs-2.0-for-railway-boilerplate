@@ -119,7 +119,7 @@ const Payment = ({
         currency: cart.region?.currency_code?.toLowerCase() || 'usd',
         total: {
           label: 'Total',
-          amount: cart.total || 0,
+          amount: (cart.total || 0) * 100,
         },
         requestPayerName: true,
         requestPayerEmail: true,
