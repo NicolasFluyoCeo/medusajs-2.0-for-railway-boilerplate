@@ -4,8 +4,10 @@ import FeaturedProducts from "@modules/home/components/featured-products"
 import NewCollection from "@modules/home/components/new_collection"
 import Hero from "@modules/home/components/hero"
 import SaveSpot from "@modules/home/components/save-spot"
+import SignupPopup from "@modules/home/components/signup-popup"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import { getCustomer } from "@lib/data/customer"
 
 export const metadata: Metadata = {
   title: "NG Soccer Gloves - Professional Goalkeeper Equipment",
@@ -20,6 +22,8 @@ export default async function Home({
 }) {
   const collections = await getCollectionsWithProducts(countryCode)
   const region = await getRegion(countryCode)
+  const customer = await getCustomer().catch(() => null)
+  const isLoggedIn = !!customer
 
   if (!collections || !region) {
     return null
@@ -35,6 +39,7 @@ export default async function Home({
         <FeaturedProducts collections={collections} region={region} />
       </div>
       <SaveSpot />
+      <SignupPopup countryCode={countryCode} isLoggedIn={isLoggedIn} />
     </>
   )
 }

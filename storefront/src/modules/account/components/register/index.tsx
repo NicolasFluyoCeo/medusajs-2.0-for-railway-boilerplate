@@ -28,6 +28,14 @@ const Register = ({ setCurrentView }: Props) => {
         Create your NG Soccer Gloves Member profile, and get access to an enhanced
         shopping experience.
       </p>
+      
+      {/* Discount promotion */}
+      <div className="w-full bg-green-50 border border-green-200 rounded-md p-4 mb-6">
+        <p className="text-center font-semibold text-green-700">
+          Get 10% OFF your first order when you register today!
+        </p>
+      </div>
+      
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
           <Input

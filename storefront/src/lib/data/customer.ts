@@ -57,6 +57,40 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
     setAuthToken(typeof loginToken === 'string' ? loginToken : loginToken.location)
 
+    // Create the first-time discount for the new customer
+    try {
+      const response = await fetch(`${process.env.BACKEND_URL || 'http://localhost:9000'}/store/create-first-time-discount`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${typeof loginToken === 'string' ? loginToken : loginToken.location}`
+        },
+        body: JSON.stringify({
+          customer_id: createdCustomer.id,
+        }),
+      })
+
+      const discountData = await response.json()
+      
+      if (discountData.success && discountData.discount) {
+        // Store the discount code in session/cookie for later use
+        createdCustomer.metadata = {
+          ...createdCustomer.metadata,
+          first_purchase_discount: discountData.discount.code,
+        }
+        
+        // Update the customer with the discount metadata
+        await sdk.store.customer.update(
+          { metadata: createdCustomer.metadata },
+          {},
+          { authorization: `Bearer ${typeof loginToken === 'string' ? loginToken : loginToken.location}` }
+        )
+      }
+    } catch (discountError) {
+      console.error("Error creating first-time discount:", discountError)
+      // Continue with registration even if discount creation fails
+    }
+
     revalidateTag("customer")
     return createdCustomer
   } catch (error: any) {
