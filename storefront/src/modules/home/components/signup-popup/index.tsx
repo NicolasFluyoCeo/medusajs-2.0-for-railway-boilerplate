@@ -51,7 +51,7 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ countryCode, isLoggedIn }) =>
       />
       
       {/* Modal content */}
-      <div className={`relative z-10 w-full md:w-4/5 lg:w-3/5 xl:w-1/2 transform transition-all ${isOpen ? 'scale-100' : 'scale-95'}`}>
+      <div className={`relative z-10 w-full md:w-3/4 lg:w-1/2 xl:w-2/5 max-h-[90vh] md:max-h-[80vh] lg:max-h-[70vh] overflow-auto transform transition-all ${isOpen ? 'scale-100' : 'scale-95'}`}>
         {/* Close button in top-right corner */}
         <button 
           onClick={closeModal}
@@ -68,7 +68,7 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ countryCode, isLoggedIn }) =>
             alt="Welcome to NG Soccer Gloves" 
             width={1000} 
             height={1000} 
-            className="w-full h-auto"
+            className="w-full h-auto max-h-[80vh]"
             priority
           />
         </div>
