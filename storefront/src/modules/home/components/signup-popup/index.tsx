@@ -51,7 +51,7 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ countryCode, isLoggedIn }) =>
       />
       
       {/* Modal content */}
-      <div className={`relative z-10 max-w-4xl w-full transform transition-all ${isOpen ? 'scale-100' : 'scale-95'}`}>
+      <div className={`relative z-10 w-full md:w-4/5 lg:w-3/5 xl:w-1/2 transform transition-all ${isOpen ? 'scale-100' : 'scale-95'}`}>
         {/* Close button in top-right corner */}
         <button 
           onClick={closeModal}
