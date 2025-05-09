@@ -20,7 +20,7 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ countryCode, isLoggedIn }) =>
       // Show popup after 5 seconds of landing on the page
       const timer = setTimeout(() => {
         setIsOpen(true)
-      }, 5000)
+      }, 15000)
 
       return () => clearTimeout(timer)
     }

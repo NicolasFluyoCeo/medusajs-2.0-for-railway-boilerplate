@@ -34,6 +34,7 @@
     "@stripe/stripe-js": "^1.29.0",
     "algoliasearch": "^4.20.0",
     "axios": "^1.6.7",
+    "gsap": "^3.13.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.479.0",
     "medusajs-launch-utils": "latest",
