@@ -119,19 +119,55 @@ const Payment = ({
         currency: cart.region?.currency_code?.toLowerCase() || 'usd',
         total: {
           label: 'Total',
-          amount: (cart.total || 0) * 100,
+          amount: cart.total || 0,
         },
         requestPayerName: true,
         requestPayerEmail: true,
       });
 
-      pr.canMakePayment().then(result => {
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      }).catch(() => {
-        // Silenciar errores de canMakePayment
-      });
+      pr.canMakePayment()
+        .then((result) => {
+          if (result) {
+            pr.on('paymentmethod', async (ev) => {
+              try {
+                if (!activeSession?.data?.client_secret) {
+                  throw new Error('Missing client secret for payment confirmation.');
+                }
+
+                const { error: confirmError } = await stripe.confirmCardPayment(
+                  activeSession.data.client_secret as string,
+                  {
+                    payment_method: ev.paymentMethod.id,
+                  },
+                  {
+                    handleActions: false,
+                  }
+                );
+
+                if (confirmError) {
+                  ev.complete('fail');
+                  setError(confirmError.message);
+                  return;
+                }
+
+                ev.complete('success');
+
+                router.push(
+                  pathname + '?' + createQueryString('step', 'review'),
+                  { scroll: false }
+                );
+              } catch (err: any) {
+                ev.complete('fail');
+                setError(err.message);
+              }
+            });
+
+            setPaymentRequest(pr);
+          }
+        })
+        .catch(() => {
+          // Silenciamos errores de canMakePayment
+        });
     }
   }, [stripe, isStripe, stripeReady, cart.total, cart.region?.currency_code]);
 
