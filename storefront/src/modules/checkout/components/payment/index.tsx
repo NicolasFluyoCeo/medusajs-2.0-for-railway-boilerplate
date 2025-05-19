@@ -13,7 +13,7 @@ import Divider from "@modules/common/components/divider"
 import PaymentContainer from "@modules/checkout/components/payment-container"
 import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
-import { initiatePaymentSession } from "@lib/data/cart"
+import { initiatePaymentSession, placeOrder } from "@lib/data/cart"
 
 const Payment = ({
   cart,
@@ -152,10 +152,8 @@ const Payment = ({
 
                 ev.complete('success');
 
-                router.push(
-                  pathname + '?' + createQueryString('step', 'review'),
-                  { scroll: false }
-                );
+                // Una vez que Apple Pay confirma el pago, finalizamos el pedido
+                await placeOrder();
               } catch (err: any) {
                 ev.complete('fail');
                 setError(err.message);
