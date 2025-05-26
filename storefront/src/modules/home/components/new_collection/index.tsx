@@ -15,7 +15,7 @@ export default async function NewCollection({
 }: {
   countryCode: string
 }) {
-  const collection = await getCollectionWithProductsByHandle("New-collection", countryCode)
+  const collection = await getCollectionWithProductsByHandle("fresh-collection", countryCode)
   const region = await getRegion(countryCode)
 
   if (!collection || !region) {
