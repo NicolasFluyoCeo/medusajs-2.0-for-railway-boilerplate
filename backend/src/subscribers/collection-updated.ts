@@ -1,10 +1,11 @@
 import type { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
+import { STOREFRONT_URL } from "../lib/constants"
 
 /**
  * Triggers storefront cache revalidation when collections or related products are updated.
  */
 export default async function collectionUpdatedSubscriber({ container }: SubscriberArgs) {
-  const url = process.env.STOREFRONT_URL || "http://localhost:3000"
+  const url = STOREFRONT_URL
 
   try {
     await fetch(`${url}/api/revalidate/collections`, { method: "POST" })
