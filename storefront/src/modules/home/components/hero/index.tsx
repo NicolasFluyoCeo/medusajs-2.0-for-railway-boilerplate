@@ -33,10 +33,6 @@ const gloveDetails = [
 ];
 const extendedGloves = [...gloveDetails, ...gloveDetails, ...gloveDetails];
 
-// Construcción de cinta infinita para COMING SOON
-const baseComing = Array(extendedGloves.length).fill("COMING SOON"); // igual número de items que en la cinta de nombres
-const extendedComing = [...baseComing, ...baseComing];
-
 export default function HeroDiagonalRibbon() {
   return (
     <section
@@ -57,26 +53,6 @@ export default function HeroDiagonalRibbon() {
           alt="NG Logo"
           className="max-w-[60%] max-h-[80%] object-contain"
         />
-      </div>
-
-      {/* Cinta horizontal animada para COMING SOON encima del logo */}
-      <div className="absolute top-16 inset-x-0 overflow-hidden pointer-events-none z-30">
-        <div
-          className="flex whitespace-nowrap bg-white/95 border-2 border-black py-1 md:py-2"
-          style={{
-            width: "200%",
-            animation: "comingMarquee 12s linear infinite",
-          }}
-        >
-          {extendedComing.map((text, idx) => (
-            <span
-              key={idx}
-              className="mx-4 md:mx-8 text-5xl md:text-6xl uppercase"
-            >
-              {text}
-            </span>
-          ))}
-        </div>
       </div>
 
       {/* Cinta diagonal animada de nombres */}
@@ -113,10 +89,6 @@ export default function HeroDiagonalRibbon() {
       </div>
 
       <style jsx>{`
-        @keyframes comingMarquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
         @keyframes marquee {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-33.3333%); }
@@ -127,7 +99,6 @@ export default function HeroDiagonalRibbon() {
           100% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
         }
         @media (prefers-reduced-motion: reduce) {
-          div[style*="animation: comingMarquee"] { animation: none !important; }
           div[style*="animation: marquee"] { animation: none !important; }
         }
       `}</style>
