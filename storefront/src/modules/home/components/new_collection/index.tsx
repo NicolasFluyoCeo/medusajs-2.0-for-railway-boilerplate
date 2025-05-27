@@ -4,25 +4,43 @@ import Link from "next/link"
 
 import InteractiveLink from "@modules/common/components/interactive-link"
 import ProductPreview from "@modules/products/components/product-preview"
-import { getCollectionWithProductsByHandle } from "@lib/data/collections"
+import { getProductByHandle } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import { getProductPrice } from "@lib/util/get-product-price"
+// import { getProductPrice } from "@lib/util/get-product-price"
 
-const MAX_PRODUCTS = 3
+// const MAX_PRODUCTS = 3
+
+const productHandles = [
+  "phantom-pink-gloves",
+  "infierno-gloves",
+  "tp-gloves",
+]
 
 export default async function NewCollection({
   countryCode,
 }: {
   countryCode: string
 }) {
-  const collection = await getCollectionWithProductsByHandle("fresh-collection", countryCode)
   const region = await getRegion(countryCode)
 
-  if (!collection || !region) {
+  if (!region) {
     return null
   }
 
-  const products = collection.products?.slice(0, MAX_PRODUCTS) || []
+  // Fetch all products in parallel
+  const productPromises = productHandles.map((handle) =>
+    getProductByHandle(handle, region.id).catch((e) => {
+      console.error(`Failed to fetch product with handle ${handle}:`, e)
+      return null // Return null if a product fetch fails
+    })
+  )
+  
+  const fetchedProducts = await Promise.all(productPromises)
+  
+  // Filter out any nulls from failed fetches and ensure type correctness
+  const products = fetchedProducts.filter(
+    (product): product is HttpTypes.StoreProduct => product !== null
+  )
 
   if (products.length === 0) {
     return null
