@@ -13,6 +13,16 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Configuración optimizada para mejorar rendimiento
+  experimental: {
+    optimizePackageImports: ['@medusajs/ui', '@medusajs/js-sdk'],
+  },
+  // Configuración de compresión
+  compress: true,
+  // Configuración de timeout para server actions
+  serverActions: {
+    bodySizeLimit: '2mb',
+  },
   images: {
     remotePatterns: [
       {

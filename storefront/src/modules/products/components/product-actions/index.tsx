@@ -103,7 +103,7 @@ export default function ProductActions({
       await addToCart({
         variantId: selectedVariant.id,
         quantity: 1,
-        countryCode,
+        countryCode: "us",
       })
     } catch (error) {
       console.error('Error adding to cart:', error)

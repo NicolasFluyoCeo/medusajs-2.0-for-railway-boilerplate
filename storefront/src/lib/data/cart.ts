@@ -25,28 +25,18 @@ export async function retrieveCart() {
     })
 }
 
-export async function getOrSetCart(countryCode: string) {
+export async function getOrSetCart(countryCode: string = "us") {
   let cart = await retrieveCart()
-  const region = await getRegion(countryCode)
+  const region = await getRegion("us")
 
   if (!region) {
-    throw new Error(`Region not found for country code: ${countryCode}`)
+    throw new Error("US region not found")
   }
 
   if (!cart) {
     const cartResp = await sdk.store.cart.create({ region_id: region.id })
     cart = cartResp.cart
     setCartId(cart.id)
-    revalidateTag("cart")
-  }
-
-  if (cart && cart?.region_id !== region.id) {
-    await sdk.store.cart.update(
-      cart.id,
-      { region_id: region.id },
-      {},
-      getAuthHeaders()
-    )
     revalidateTag("cart")
   }
 
@@ -71,7 +61,7 @@ export async function updateCart(data: HttpTypes.StoreUpdateCart) {
 export async function addToCart({
   variantId,
   quantity,
-  countryCode,
+  countryCode = "us",
 }: {
   variantId: string
   quantity: number
@@ -81,35 +71,25 @@ export async function addToCart({
     throw new Error("Missing variant ID when adding to cart")
   }
 
-  let cart = await retrieveCart()
-  
-  if (!cart) {
-    const region = await getRegion(countryCode)
-    if (!region) {
-      throw new Error(`Region not found for country code: ${countryCode}`)
-    }
-    
-    const cartResp = await sdk.store.cart.create({ region_id: region.id })
-    cart = cartResp.cart
-    setCartId(cart.id)
-  } else {
-    const region = await getRegion(countryCode)
-    if (region && cart.region_id !== region.id) {
-      await sdk.store.cart.update(
-        cart.id,
-        { region_id: region.id },
-        {},
-        getAuthHeaders()
-      )
-    }
-  }
+  try {
+    let cart = await retrieveCart()
 
-  if (!cart) {
-    throw new Error("Error retrieving or creating cart")
-  }
+    if (!cart) {
+      const region = await getRegion("us")
+      if (!region) {
+        throw new Error("US region not found")
+      }
+      
+      const cartResp = await sdk.store.cart.create({ region_id: region.id })
+      cart = cartResp.cart
+      setCartId(cart.id)
+    }
 
-  await sdk.store.cart
-    .createLineItem(
+    if (!cart) {
+      throw new Error("Error retrieving or creating cart")
+    }
+
+    await sdk.store.cart.createLineItem(
       cart.id,
       {
         variant_id: variantId,
@@ -118,10 +98,12 @@ export async function addToCart({
       {},
       getAuthHeaders()
     )
-    .then(() => {
-      revalidateTag("cart")
-    })
-    .catch(medusaError)
+
+    revalidateTag("cart")
+  } catch (error) {
+    console.error('Error adding to cart:', error)
+    throw error
+  }
 }
 
 export async function updateLineItem({
