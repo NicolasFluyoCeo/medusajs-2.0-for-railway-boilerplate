@@ -81,7 +81,29 @@ export async function addToCart({
     throw new Error("Missing variant ID when adding to cart")
   }
 
-  const cart = await getOrSetCart(countryCode)
+  let cart = await retrieveCart()
+  
+  if (!cart) {
+    const region = await getRegion(countryCode)
+    if (!region) {
+      throw new Error(`Region not found for country code: ${countryCode}`)
+    }
+    
+    const cartResp = await sdk.store.cart.create({ region_id: region.id })
+    cart = cartResp.cart
+    setCartId(cart.id)
+  } else {
+    const region = await getRegion(countryCode)
+    if (region && cart.region_id !== region.id) {
+      await sdk.store.cart.update(
+        cart.id,
+        { region_id: region.id },
+        {},
+        getAuthHeaders()
+      )
+    }
+  }
+
   if (!cart) {
     throw new Error("Error retrieving or creating cart")
   }
@@ -152,32 +174,37 @@ export async function enrichLineItems(
     | null,
   regionId: string
 ) {
-  if (!lineItems) return []
+  if (!lineItems || lineItems.length === 0) return []
+
+  // Early return if no product IDs
+  const productIds = lineItems.map((lineItem) => lineItem.product_id!).filter(Boolean)
+  if (productIds.length === 0) return lineItems as HttpTypes.StoreCartLineItem[]
 
   // Prepare query parameters
   const queryParams = {
-    ids: lineItems.map((lineItem) => lineItem.product_id!),
+    ids: productIds,
     regionId: regionId,
   }
 
   // Fetch products by their IDs
   const products = await getProductsById(queryParams)
-  // If there are no line items or products, return an empty array
-  if (!lineItems?.length || !products) {
-    return []
+  if (!products || products.length === 0) {
+    return lineItems as HttpTypes.StoreCartLineItem[]
   }
+
+  // Create maps for O(1) lookup instead of O(n) for each item
+  const productMap = new Map(products.map((p: any) => [p.id, p]))
 
   // Enrich line items with product and variant information
   const enrichedItems = lineItems.map((item) => {
-    const product = products.find((p: any) => p.id === item.product_id)
-    const variant = product?.variants?.find(
+    const product = productMap.get(item.product_id!)
+    if (!product) return item
+
+    const variant = product.variants?.find(
       (v: any) => v.id === item.variant_id
     )
 
-    // If product or variant is not found, return the original item
-    if (!product || !variant) {
-      return item
-    }
+    if (!variant) return item
 
     // If product and variant are found, enrich the item
     return {
