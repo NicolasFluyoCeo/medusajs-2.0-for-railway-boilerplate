@@ -31,8 +31,7 @@ const gloveDetails = [
   { name: "PHANTOM",  color: "#FF0000",   font: audiowide    },
   { name: "CYBER",    color: "#00FFFF",   font: bebasNeue    },
 ];
-
-// Creamos una lista larga para el scroll continuo
+// Para scroll continuo
 const extendedGloves = [...gloveDetails, ...gloveDetails, ...gloveDetails];
 const marqueeItems   = [...extendedGloves, ...extendedGloves];
 
@@ -47,45 +46,35 @@ export default function HeroDiagonalRibbon() {
       `}
     >
       {/* —————————————————— */}
-      {/* 1) CINTA BLANCA INFINITA */}
+      {/* 1) BARRA BLANCA 100% DE ANCHO */}
       {/* —————————————————— */}
       <div
         className="absolute left-0 w-full pointer-events-none z-25"
-        style={{ top: "15%" }}  // ajusta este valor para subir/bajar la cinta
+        style={{ top: "15%" }}  // ajusta para subir/bajar la barra
       >
-        <div className="w-full bg-white/95 border-2 border-black py-1 md:py-2" />
-      </div>
-
-      {/* —————————————————— */}
-      {/* 2) TEXTO EN MARQUEE SOBRE LA CINTA */}
-      {/* —————————————————— */}
-      <div
-        className="absolute left-0 w-full overflow-hidden pointer-events-none z-30"
-        style={{ top: "15%" }}  // coincide con la cinta
-      >
-        <div
-          className="flex whitespace-nowrap"
-          style={{
-            animation: "marquee 18s linear infinite",
-          }}
-        >
-          {marqueeItems.map((g, i) => (
-            <span
-              key={i}
-              className={`
-                mx-4 md:mx-8 text-4xl md:text-5xl uppercase
-                ${g.font.className}
-              `}
-              style={{ color: g.color }}
-            >
-              {g.name}
-            </span>
-          ))}
+        <div className="w-full bg-white/95 border-2 border-black py-1 md:py-2 overflow-hidden">
+          <div
+            className="flex whitespace-nowrap"
+            style={{ animation: "marquee 18s linear infinite" }}
+          >
+            {marqueeItems.map((g, i) => (
+              <span
+                key={i}
+                className={`
+                  mx-4 md:mx-8 text-4xl md:text-5xl uppercase
+                  ${g.font.className}
+                `}
+                style={{ color: g.color }}
+              >
+                {g.name}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* —————————————————— */}
-      {/* 3) LOGO DEBAJO */}
+      {/* 2) LOGO DEBAJO */}
       {/* —————————————————— */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
@@ -101,7 +90,7 @@ export default function HeroDiagonalRibbon() {
       <style jsx>{`
         @keyframes marquee {
           0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); } /* al tener 2× los ítems, desplazamos la mitad */
+          100% { transform: translateX(-50%); }
         }
         @keyframes logo-glow {
           0%   { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); opacity: 0; }
