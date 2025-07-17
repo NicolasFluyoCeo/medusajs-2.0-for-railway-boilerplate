@@ -13,7 +13,7 @@ export default async function FeaturedProducts({
   const { response } = await getProductsList({
     queryParams: {
       limit: 20, // Mostrar hasta 20 productos
-      order: "created_at", // Ordenar por fecha de creación
+      order: "-created_at", // Ordenar por fecha de creación
     },
     countryCode: "us", // Siempre usar "us"
   });
