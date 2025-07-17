@@ -2,16 +2,23 @@ import { HttpTypes } from "@medusajs/types"
 import { Text } from "@medusajs/ui"
 import Link from "next/link"
 import ProductPreview from "@modules/products/components/product-preview"
+import { getProductsList } from "@lib/data/products"
 
 export default async function FeaturedProducts({
-  collections,
   region,
 }: {
-  collections: HttpTypes.StoreCollection[]
   region: HttpTypes.StoreRegion
 }) {
-  // Extraer todos los productos de todas las colecciones
-  const allProducts = collections.flatMap((collection) => collection.products || []);
+  // Obtener productos directamente, ordenados por fecha de creación (más recientes primero)
+  const { response } = await getProductsList({
+    queryParams: {
+      limit: 20, // Mostrar hasta 20 productos
+      order: "created_at", // Ordenar por fecha de creación
+    },
+    countryCode: "us", // Siempre usar "us"
+  });
+  
+  const allProducts = response.products;
   
   if (allProducts.length === 0) {
     return null;
