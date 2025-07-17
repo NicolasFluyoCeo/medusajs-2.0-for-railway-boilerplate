@@ -31,7 +31,10 @@ const gloveDetails = [
   { name: "PHANTOM",  color: "#FF0000",   font: audiowide    },
   { name: "CYBER",    color: "#00FFFF",   font: bebasNeue    },
 ];
+
+// Creamos una lista larga para el scroll continuo
 const extendedGloves = [...gloveDetails, ...gloveDetails, ...gloveDetails];
+const marqueeItems   = [...extendedGloves, ...extendedGloves];
 
 export default function HeroDiagonalRibbon() {
   return (
@@ -44,21 +47,29 @@ export default function HeroDiagonalRibbon() {
       `}
     >
       {/* —————————————————— */}
-      {/* 1) CINTA HORIZONTAL SOBRE EL LOGO */}
+      {/* 1) CINTA BLANCA INFINITA */}
       {/* —————————————————— */}
       <div
-        className="absolute left-0 w-full pointer-events-none z-30"
-        style={{ top: "20%" }}  // Bajamos la cinta un poco más abajo
+        className="absolute left-0 w-full pointer-events-none z-25"
+        style={{ top: "15%" }}  // ajusta este valor para subir/bajar la cinta
+      >
+        <div className="w-full bg-white/95 border-2 border-black py-1 md:py-2" />
+      </div>
+
+      {/* —————————————————— */}
+      {/* 2) TEXTO EN MARQUEE SOBRE LA CINTA */}
+      {/* —————————————————— */}
+      <div
+        className="absolute left-0 w-full overflow-hidden pointer-events-none z-30"
+        style={{ top: "15%" }}  // coincide con la cinta
       >
         <div
-          className="mx-auto flex whitespace-nowrap bg-white/95 border-2 border-black py-1 md:py-2"
+          className="flex whitespace-nowrap"
           style={{
-            width: "300%",
-            transform: "rotate(0deg)",            // sin rotación
             animation: "marquee 18s linear infinite",
           }}
         >
-          {extendedGloves.map((g, i) => (
+          {marqueeItems.map((g, i) => (
             <span
               key={i}
               className={`
@@ -74,7 +85,7 @@ export default function HeroDiagonalRibbon() {
       </div>
 
       {/* —————————————————— */}
-      {/* 2) LOGO CON GLOW DEBAJO DE LA CINTA */}
+      {/* 3) LOGO DEBAJO */}
       {/* —————————————————— */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
@@ -90,7 +101,7 @@ export default function HeroDiagonalRibbon() {
       <style jsx>{`
         @keyframes marquee {
           0%   { transform: translateX(0); }
-          100% { transform: translateX(-33.3333%); }
+          100% { transform: translateX(-50%); } /* al tener 2× los ítems, desplazamos la mitad */
         }
         @keyframes logo-glow {
           0%   { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); opacity: 0; }
