@@ -36,7 +36,7 @@ export default async function Home({
         <NewCollection countryCode={countryCode} />
       </div>
       <div className="py-12">
-        <FeaturedProducts collections={collections} region={region} />
+        <FeaturedProducts region={region} />
       </div>
       <SaveSpot />
       <SignupPopup countryCode={countryCode} isLoggedIn={isLoggedIn} />
