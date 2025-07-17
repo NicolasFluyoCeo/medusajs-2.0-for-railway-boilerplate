@@ -43,9 +43,41 @@ export default function HeroDiagonalRibbon() {
         ${rubikMono.className}
       `}
     >
-      {/* Logo con glow */}
+      {/* —————————————————— */}
+      {/* 1) CINTA HORIZONTAL SOBRE EL LOGO */}
+      {/* —————————————————— */}
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="absolute left-0 w-full pointer-events-none z-30"
+        style={{ top: "1rem" }}  // Ajusta este valor para subir/bajar la cinta
+      >
+        <div
+          className="mx-auto flex whitespace-nowrap bg-white/95 border-2 border-black py-1 md:py-2"
+          style={{
+            width: "300%",
+            transform: "rotate(0deg)",            // sin rotación
+            animation: "marquee 18s linear infinite",
+          }}
+        >
+          {extendedGloves.map((g, i) => (
+            <span
+              key={i}
+              className={`
+                mx-4 md:mx-8 text-4xl md:text-5xl uppercase
+                ${g.font.className}
+              `}
+              style={{ color: g.color }}
+            >
+              {g.name}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* —————————————————— */}
+      {/* 2) LOGO CON GLOW DEBAJO DE LA CINTA */}
+      {/* —————————————————— */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
         style={{ animation: "logo-glow 4s ease-in-out 1" }}
       >
         <img
@@ -53,39 +85,6 @@ export default function HeroDiagonalRibbon() {
           alt="NG Logo"
           className="max-w-[60%] max-h-[80%] object-contain"
         />
-      </div>
-
-      {/* Cinta diagonal animada de nombres */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
-        <div
-          className="absolute left-0"
-          style={{
-            top: "55%",
-            width: "200vw",
-            transform: "translateY(-50%) rotate(-12deg)",
-          }}
-        >
-          <div
-            className="flex whitespace-nowrap bg-white/95 border-2 border-black py-1 md:py-2"
-            style={{
-              width: "300%",
-              animation: "marquee 18s linear infinite",
-            }}
-          >
-            {extendedGloves.map((g, i) => (
-              <span
-                key={i}
-                className={`
-                  mx-4 md:mx-8 text-4xl md:text-5xl uppercase
-                  ${g.font.className}
-                `}
-                style={{ color: g.color }}
-              >
-                {g.name}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
 
       <style jsx>{`
