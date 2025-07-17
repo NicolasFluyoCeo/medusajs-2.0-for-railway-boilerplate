@@ -48,7 +48,7 @@ export default function HeroDiagonalRibbon() {
       {/* —————————————————— */}
       <div
         className="absolute left-0 w-full pointer-events-none z-30"
-        style={{ top: "1rem" }}  // Ajusta este valor para subir/bajar la cinta
+        style={{ top: "20%" }}  // Bajamos la cinta un poco más abajo
       >
         <div
           className="mx-auto flex whitespace-nowrap bg-white/95 border-2 border-black py-1 md:py-2"
