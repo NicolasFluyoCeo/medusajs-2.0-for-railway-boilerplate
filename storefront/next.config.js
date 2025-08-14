@@ -13,17 +13,53 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Configuración optimizada para mejorar rendimiento
+  // Configuración optimizada para mejorar rendimiento y reducir memoria
   experimental: {
     optimizePackageImports: ['@medusajs/ui', '@medusajs/js-sdk'],
+    // Optimizar CSS para reducir memoria
+    optimizeCss: true,
+    // Usar workers basados en memoria
+    memoryBasedWorkers: true,
   },
   // Configuración de compresión
   compress: true,
+  // Minificador SWC más eficiente
+  swcMinify: true,
   // Configuración de timeout para server actions
   serverActions: {
-    bodySizeLimit: '2mb',
+    bodySizeLimit: '1mb', // Reducido de 2mb a 1mb
+  },
+  // Configuración de webpack para optimizar memoria
+  webpack: (config, { dev, isServer }) => {
+    // Optimizar chunks para mejor cache y menos memoria
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          common: {
+            minChunks: 2,
+            chunks: 'all',
+            name: 'common',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+        },
+      }
+    }
+    return config
   },
   images: {
+    // Optimizaciones de imágenes para reducir memoria y mejorar rendimiento
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: false,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: "http",

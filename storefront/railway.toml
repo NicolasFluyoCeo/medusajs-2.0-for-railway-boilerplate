@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build:optimized"
+
+[deploy]
+startCommand = "npm run start:optimized"
+healthcheckPath = "/api/healthcheck"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+[env]
+NODE_ENV = "production"
+NEXT_TELEMETRY_DISABLED = "1"
+GENERATE_SOURCEMAP = "false"

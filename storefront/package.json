@@ -14,6 +14,8 @@
     "build": "npm run wait && npm run launcher build",
     "start": "npm run launcher start",
     "build:next": "next build",
+    "build:optimized": "NODE_OPTIONS='--max-old-space-size=1024' GENERATE_SOURCEMAP=false npm run wait && npm run launcher build",
+    "start:optimized": "NODE_OPTIONS='--max-old-space-size=512' npm run start",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "test-e2e": "playwright test e2e"
