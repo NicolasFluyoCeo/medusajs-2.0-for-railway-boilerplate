@@ -9,11 +9,12 @@ export default async function FeaturedProducts({
 }: {
   region: HttpTypes.StoreRegion
 }) {
-  // Obtener productos directamente, ordenados por fecha de creación (más recientes primero)
+  // OPTIMIZACIÓN: Obtener solo 8 productos para reducir uso de memoria
   const { response } = await getProductsList({
     queryParams: {
-      limit: 20, // Mostrar hasta 20 productos
+      limit: 8, // Reducido de 20 a 8 productos para ahorrar memoria
       order: "-created_at", // Ordenar por fecha de creación
+      fields: "id,title,handle,thumbnail,variants.calculated_price", // Solo campos necesarios
     },
     countryCode: "us", // Siempre usar "us"
   });
