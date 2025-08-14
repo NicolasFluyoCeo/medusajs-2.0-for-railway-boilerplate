@@ -16,19 +16,13 @@ const nextConfig = {
   // Configuración optimizada para mejorar rendimiento y reducir memoria
   experimental: {
     optimizePackageImports: ['@medusajs/ui', '@medusajs/js-sdk'],
-    // Optimizar CSS para reducir memoria
-    optimizeCss: true,
-    // Usar workers basados en memoria
-    memoryBasedWorkers: true,
+    // Removido optimizeCss y memoryBasedWorkers que causan errores
   },
   // Configuración de compresión
   compress: true,
   // Minificador SWC más eficiente
   swcMinify: true,
-  // Configuración de timeout para server actions
-  serverActions: {
-    bodySizeLimit: '1mb', // Reducido de 2mb a 1mb
-  },
+  // Removido serverActions que no es compatible con Next.js 14.2.21
   // Configuración de webpack para optimizar memoria
   webpack: (config, { dev, isServer }) => {
     // Optimizar chunks para mejor cache y menos memoria
