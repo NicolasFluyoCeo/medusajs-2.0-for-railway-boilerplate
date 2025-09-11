@@ -22,9 +22,13 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV GENERATE_SOURCEMAP=false
 ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL=http://localhost:9000
+ENV NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_temp_key_for_build_only
 
 # Build directo sin esperar backend
 RUN NODE_OPTIONS='--max-old-space-size=1024' pnpm run build:next
+
+# Limpiar variable temporal
+ENV NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=
 
 # Exponer puerto
 EXPOSE 3000
