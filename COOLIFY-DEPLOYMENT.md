@@ -151,9 +151,16 @@ Coolify incluye métricas básicas. Para monitoreo avanzado, considera:
 
 ## 🐛 Solución de Problemas
 
+### Error: "Environment variable for DATABASE_URL is not set" durante build
+
+**Solución**: Este error se ha solucionado en la configuración actual. Los Dockerfiles ahora usan variables temporales durante el build y las reales durante el runtime.
+
 ### Backend no inicia
 
-1. Verifica las variables de entorno
+1. Verifica las variables de entorno obligatorias:
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `COOKIE_SECRET`
 2. Revisa los logs del contenedor
 3. Asegúrate de que PostgreSQL esté disponible
 
@@ -168,6 +175,10 @@ Coolify incluye métricas básicas. Para monitoreo avanzado, considera:
 1. Verifica la configuración de MinIO
 2. Revisa los permisos del bucket
 3. Confirma la conectividad entre servicios
+
+### Error: "Docker Compose file not found"
+
+**Solución**: Asegúrate de que Coolify esté configurado para usar `docker-compose.yaml` (con extensión `.yaml`). El archivo está incluido en el repositorio.
 
 ## 📚 Recursos Adicionales
 

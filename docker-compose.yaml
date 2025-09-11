@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: medusa
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medusa123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_ADMIN_KEY:-meilisearch123456}
+      MEILI_ENV: production
+    volumes:
+      - meilisearch_data:/meili_data
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin123}
+    ports:
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://medusa:${POSTGRES_PASSWORD:-medusa123}@postgres:5432/medusa
+      REDIS_URL: redis://redis:6379
+      BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:9000}
+      ADMIN_CORS: ${ADMIN_CORS:-http://localhost:9000,http://localhost:3000}
+      AUTH_CORS: ${AUTH_CORS:-http://localhost:9000,http://localhost:3000}
+      STORE_CORS: ${STORE_CORS:-http://localhost:3000}
+      JWT_SECRET: ${JWT_SECRET:-jwt_secret_change_in_production}
+      COOKIE_SECRET: ${COOKIE_SECRET:-cookie_secret_change_in_production}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin123}
+      MINIO_BUCKET: ${MINIO_BUCKET:-medusa-media}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM: ${RESEND_FROM_EMAIL}
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      MEILISEARCH_HOST: http://meilisearch:7700
+      MEILISEARCH_ADMIN_KEY: ${MEILISEARCH_ADMIN_KEY:-meilisearch123456}
+      MEDUSA_WORKER_MODE: shared
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres
+      - redis
+      - meilisearch
+      - minio
+    restart: unless-stopped
+
+  storefront:
+    build:
+      context: ./storefront
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${BACKEND_PUBLIC_URL:-http://localhost:9000}
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${MEDUSA_PUBLISHABLE_KEY}
+      NEXT_TELEMETRY_DISABLED: 1
+      GENERATE_SOURCEMAP: false
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  meilisearch_data:
+  minio_data:

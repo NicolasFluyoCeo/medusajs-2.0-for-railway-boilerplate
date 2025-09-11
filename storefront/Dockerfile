@@ -21,12 +21,13 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV GENERATE_SOURCEMAP=false
+ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL=http://localhost:9000
 
-# Build optimizado
-RUN NODE_OPTIONS='--max-old-space-size=1024' pnpm run build:optimized
+# Build directo sin esperar backend
+RUN NODE_OPTIONS='--max-old-space-size=1024' pnpm run build:next
 
 # Exponer puerto
 EXPOSE 3000
 
 # Comando de inicio optimizado
-CMD NODE_OPTIONS='--max-old-space-size=512' pnpm run start:optimized
+CMD NODE_OPTIONS='--max-old-space-size=512' pnpm run start

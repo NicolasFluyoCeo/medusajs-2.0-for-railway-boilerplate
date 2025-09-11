@@ -2,7 +2,7 @@ version: '1.0'
 type: 'docker-compose'
 services:
   - name: 'medusa-stack'
-    compose_file: 'docker-compose.yml'
+    compose_file: 'docker-compose.yaml'
     domains:
       - backend: 'api.${DOMAIN}'
       - storefront: '${DOMAIN}'
