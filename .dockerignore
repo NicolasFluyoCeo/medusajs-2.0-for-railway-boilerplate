@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Node modules (will be installed in containers)
+node_modules
+
+# Build artifacts
+dist
+build
+.next
+out
+
+# Test files
+coverage
+test-results
+playwright-report

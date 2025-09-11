@@ -6,60 +6,37 @@ services:
     environment:
       POSTGRES_DB: medusa
       POSTGRES_USER: medusa
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medusa123}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U medusa"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
   meilisearch:
     image: getmeili/meilisearch:v1.5
     environment:
-      MEILI_MASTER_KEY: ${MEILISEARCH_ADMIN_KEY}
+      MEILI_MASTER_KEY: ${MEILISEARCH_ADMIN_KEY:-meilisearch123456}
       MEILI_ENV: production
-    ports:
-      - "7700:7700"
     volumes:
       - meilisearch_data:/meili_data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
   minio:
     image: minio/minio:latest
     environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin123}
     ports:
       - "9001:9001"
-      - "9002:9000"
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
   backend:
     build:
@@ -67,41 +44,33 @@ services:
       dockerfile: Dockerfile
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgresql://medusa:${POSTGRES_PASSWORD}@postgres:5432/medusa
+      DATABASE_URL: postgresql://medusa:${POSTGRES_PASSWORD:-medusa123}@postgres:5432/medusa
       REDIS_URL: redis://redis:6379
-      BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL}
-      ADMIN_CORS: ${ADMIN_CORS}
-      AUTH_CORS: ${AUTH_CORS}
-      STORE_CORS: ${STORE_CORS}
-      JWT_SECRET: ${JWT_SECRET}
-      COOKIE_SECRET: ${COOKIE_SECRET}
+      BACKEND_PUBLIC_URL: ${BACKEND_PUBLIC_URL:-http://localhost:9000}
+      ADMIN_CORS: ${ADMIN_CORS:-http://localhost:9000,http://localhost:3000}
+      AUTH_CORS: ${AUTH_CORS:-http://localhost:9000,http://localhost:3000}
+      STORE_CORS: ${STORE_CORS:-http://localhost:3000}
+      JWT_SECRET: ${JWT_SECRET:-jwt_secret_change_in_production}
+      COOKIE_SECRET: ${COOKIE_SECRET:-cookie_secret_change_in_production}
       MINIO_ENDPOINT: minio:9000
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin123}
       MINIO_BUCKET: ${MINIO_BUCKET:-medusa-media}
       RESEND_API_KEY: ${RESEND_API_KEY}
       RESEND_FROM: ${RESEND_FROM_EMAIL}
       STRIPE_API_KEY: ${STRIPE_API_KEY}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
       MEILISEARCH_HOST: http://meilisearch:7700
-      MEILISEARCH_ADMIN_KEY: ${MEILISEARCH_ADMIN_KEY}
+      MEILISEARCH_ADMIN_KEY: ${MEILISEARCH_ADMIN_KEY:-meilisearch123456}
       MEDUSA_WORKER_MODE: shared
     ports:
       - "9000:9000"
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      meilisearch:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - postgres
+      - redis
+      - meilisearch
+      - minio
+    restart: unless-stopped
 
   storefront:
     build:
@@ -109,15 +78,15 @@ services:
       dockerfile: Dockerfile
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${BACKEND_PUBLIC_URL}
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${BACKEND_PUBLIC_URL:-http://localhost:9000}
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${MEDUSA_PUBLISHABLE_KEY}
       NEXT_TELEMETRY_DISABLED: 1
       GENERATE_SOURCEMAP: false
     ports:
       - "3000:3000"
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
+    restart: unless-stopped
 
 volumes:
   postgres_data:

@@ -1,0 +1,13 @@
+version: '1.0'
+type: 'docker-compose'
+services:
+  - name: 'medusa-stack'
+    compose_file: 'docker-compose.yml'
+    domains:
+      - backend: 'api.${DOMAIN}'
+      - storefront: '${DOMAIN}'
+    healthchecks:
+      - service: 'backend'
+        path: '/health'
+      - service: 'storefront'
+        path: '/'
