@@ -1,0 +1,32 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache libc6-compat
+
+# Instalar pnpm
+RUN npm install -g pnpm
+
+# Copiar archivos de dependencias
+COPY package.json pnpm-lock.yaml ./
+
+# Instalar dependencias
+RUN pnpm install --frozen-lockfile
+
+# Copiar código fuente
+COPY . .
+
+# Variables de entorno para build
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV GENERATE_SOURCEMAP=false
+
+# Build optimizado
+RUN NODE_OPTIONS='--max-old-space-size=1024' pnpm run build:optimized
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando de inicio optimizado
+CMD NODE_OPTIONS='--max-old-space-size=512' pnpm run start:optimized
