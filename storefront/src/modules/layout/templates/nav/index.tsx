@@ -5,14 +5,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 import NavWrapper from "@modules/layout/components/nav-wrapper"
-import dynamic from "next/dynamic"
 import { fugazOne } from "app/fonts"
-
-// Importamos el componente de forma dinámica para evitar problemas de SSR
-const SearchInput = dynamic(
-  () => import("@modules/layout/components/search-input"),
-  { ssr: false }
-)
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
