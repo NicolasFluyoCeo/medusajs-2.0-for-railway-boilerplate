@@ -6,10 +6,9 @@ export const metadata: Metadata = {
   description: "Get in touch with our team",
 }
 
-export default async function Contacts({
-  params: { countryCode },
-}: {
-  params: { countryCode: string }
+export default async function Contacts(props: {
+  params: Promise<{ countryCode: string }>
 }) {
+  const { countryCode } = await props.params
   return <ContactsTemplate countryCode={countryCode} />
-} 
+}

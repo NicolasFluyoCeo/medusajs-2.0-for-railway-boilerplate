@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { shipping_options } = await sdk.store.cart
-      .listShippingOptions(cartId, {}, getAuthHeaders())
+      .listShippingOptions(cartId, {}, await getAuthHeaders())
       .then((response) => response)
       .catch((error) => {
         console.error("Error fetching shipping options:", error)

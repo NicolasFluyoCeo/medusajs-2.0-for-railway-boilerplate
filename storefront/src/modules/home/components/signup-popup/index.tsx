@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { getAuthHeaders } from "@lib/data/cookies"
-
 type SignupPopupProps = {
   countryCode: string
   isLoggedIn: boolean

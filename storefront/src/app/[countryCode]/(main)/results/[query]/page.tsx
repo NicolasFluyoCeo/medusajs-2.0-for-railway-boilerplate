@@ -11,14 +11,16 @@ export const metadata: Metadata = {
 }
 
 type Params = {
-  params: { query: string; countryCode: string }
-  searchParams: {
+  params: Promise<{ query: string; countryCode: string }>
+  searchParams: Promise<{
     sortBy?: SortOptions
     page?: string
-  }
+  }>
 }
 
-export default async function SearchResults({ params, searchParams }: Params) {
+export default async function SearchResults(props: Params) {
+  const params = await props.params
+  const searchParams = await props.searchParams
   const { query } = params
   const { sortBy, page } = searchParams
 

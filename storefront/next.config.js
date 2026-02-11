@@ -20,8 +20,6 @@ const nextConfig = {
   },
   // Configuración de compresión
   compress: true,
-  // Minificador SWC más eficiente
-  swcMinify: true,
   // Removido serverActions que no es compatible con Next.js 14.2.21
   // Configuración de webpack para optimizar memoria
   webpack: (config, { dev, isServer }) => {
