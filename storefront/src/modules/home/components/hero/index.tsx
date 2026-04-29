@@ -13,47 +13,23 @@ const exo2 = Exo_2({ subsets: ["latin"], weight: ["400", "500", "600", "700"] })
 export default function HeroDiagonalRibbon() {
   const { activeGlove, setActiveGlove } = useGlove();
   const [rotationDirection, setRotationDirection] = useState<'left' | 'right'>('right');
-  
-  // Debug temporal
-  console.log('Active glove:', activeGlove, 'Background:', gloveDetails[activeGlove].background);
 
   const handleGloveChange = (newIndex: number, direction: 'left' | 'right') => {
     setRotationDirection(direction);
     setActiveGlove(newIndex);
   };
 
-  const getBackgroundStyle = () => {
-    const currentGlove = gloveDetails[activeGlove];
-    if (currentGlove.name === 'ALPHA') {
-      return {
-        background: 'linear-gradient(to bottom right, #131315, #603E3D, #DB9E5C, #CFC6B5, #D4D4D2)',
-        marginTop: '-64px', 
-        paddingTop: '64px',
-        paddingBottom: '2rem' // Espacio extra en la parte inferior
-      };
-    } else if (currentGlove.name === 'THUNDER') {
-      return {
-        background: 'linear-gradient(135deg, #F2503E, #E9E4D8, #EBF13C)',
-        marginTop: '-64px', 
-        paddingTop: '64px',
-        paddingBottom: '2rem'
-      };
-    } else {
-      return {
-        background: 'black',
-        marginTop: '-64px', 
-        paddingTop: '64px',
-        paddingBottom: '2rem'
-      };
-    }
-  };
+  const getBackgroundStyle = () => ({
+    background: '#000',
+    marginTop: '-64px',
+  });
 
   return (
     <section
-      className="relative w-full flex items-center justify-center overflow-hidden transition-all duration-700"
+      className="relative w-full overflow-hidden"
       style={{
         ...getBackgroundStyle(),
-        minHeight: '100vh' // Usar minHeight en lugar de height fija
+        height: '100vh',
       }}
     >
 
@@ -70,33 +46,17 @@ export default function HeroDiagonalRibbon() {
               <div
                 key={glove.name}
                 className={`
-                  absolute transition-all duration-700 ease-in-out
-                  ${index === activeGlove 
-                    ? 'opacity-100 z-30' 
+                  absolute inset-0 transition-opacity duration-700 ease-in-out
+                  ${index === activeGlove
+                    ? 'opacity-100 z-20'
                     : 'opacity-0 z-10 pointer-events-none'
                   }
                 `}
-                style={{
-                  transform: index === activeGlove 
-                    ? 'scale(1) translateX(0) rotate(0deg)' 
-                    : rotationDirection === 'right'
-                      ? (index < activeGlove 
-                          ? 'scale(0.2) translateX(-300px) rotate(-20deg)' // Guantes que ya pasaron van a la izquierda
-                          : 'scale(0.2) translateX(300px) rotate(20deg)')   // Guantes que vienen van a la derecha
-                      : (index < activeGlove 
-                          ? 'scale(0.2) translateX(-300px) rotate(-20deg)' // Rotación izquierda: anteriores a la izquierda
-                          : 'scale(0.2) translateX(300px) rotate(20deg)'),  // siguientes a la derecha
-                  filter: index === activeGlove 
-                    ? 'drop-shadow(0 0 30px rgba(255,255,255,0.3))' 
-                    : 'none',
-                  zIndex: index === activeGlove ? 30 : 10
-                }}
               >
                 <img
                   src={glove.image}
                   alt={glove.name}
-                  className="w-full h-screen object-contain max-w-none"
-                  style={{ height: '100vh' }}
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}

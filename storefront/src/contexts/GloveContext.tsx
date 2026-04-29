@@ -4,50 +4,50 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Datos de los guantes
 export const gloveDetails = [
-  { 
-    name: "ALPHA", 
-    color: "#007FFF", 
-    image: "/carrusel/alpha.png",
-    background: "bg-gradient-to-br from-[#131315] via-[#603E3D] via-[#DB9E5C] via-[#CFC6B5] to-[#D4D4D2]",
-    title: "Alpha 2.0 – Performance Without Limits",
+  {
+    name: "CORAL STORM",
+    color: "#FF6B7D",
+    image: "/new_carrousel/coral.avif",
+    gradient: "linear-gradient(135deg, #FF5E72 0%, #FF9A8A 35%, #F7E7DC 60%, #5EC4D4 100%)",
+    title: "Coral Storm – Express Your Identity",
     features: [
-      "4mm German Contact Grip",
-      "Negative cut for natural fit",
-      "Removable double wrist strap",
-      "Reinforced punching zone"
+      "4mm German Giga Grip latex",
+      "Pre-wash activation grip",
+      "Internal wrist strap closure",
+      "All-condition responsiveness"
     ],
-    tagline: "Modern. Aggressive. Built for pros.",
-    productHandle: "alpha20new"
+    tagline: "Bright. Bold. Unmistakably you.",
+    productHandle: "winter"
   },
-  { 
-    name: "SHADOW", 
-    color: "#8A2BE2", 
-    image: "/carrusel/shadow.png",
-    background: "bg-black",
-    title: "Shadow – Precision in Every Save",
+  {
+    name: "BLIZZARD",
+    color: "#E8EEF4",
+    image: "/new_carrousel/blizzard.avif",
+    gradient: "linear-gradient(135deg, #DDE6EE 0%, #F5F1E8 45%, #D9CDB1 80%, #8E7C5A 100%)",
+    title: "Blizzard – Elegance in Every Save",
     features: [
-      "4mm German Contact Grip",
-      "High-quality latex backhand",
-      "Fixed latex wrist strap",
-      "All-weather performance"
+      "4mm German Contact Grip latex",
+      "Hybrid negative + roll finger cut",
+      "Premium neoprene backhand",
+      "Match-level performance build"
     ],
-    tagline: "Silent. Strong. Let your game talk.",
-    productHandle: "shadown"
+    tagline: "Clean. Modern. Quietly devastating.",
+    productHandle: "blizzard"
   },
-  { 
-    name: "THUNDER", 
-    color: "#FFD700", 
-    image: "/carrusel/thunder.png",
-    background: "bg-gradient-to-br from-[#F4533F] via-[#261B1B] via-[#E8EC1C] via-[#E5DFD1] to-[#D70918]",
-    title: "Thunder Rage – Unleash the Power",
+  {
+    name: "THUNDER STRIKE",
+    color: "#1B4FCE",
+    image: "/new_carrousel/thunder-strike.avif",
+    gradient: "linear-gradient(135deg, #0E2A8A 0%, #1B4FCE 30%, #FFD43D 70%, #E63946 100%)",
+    title: "Thunder Strike – Elite Bold Identity",
     features: [
-      "4mm German Contact Grip",
-      "Negative cut for pro fit",
-      "Extended wrist design",
-      "Dynamic punching zone"
+      "4mm German Giga Grip latex",
+      "3D molded punching zone",
+      "Reinforced ball-clearing structure",
+      "Secure internal wrist closure"
     ],
-    tagline: "Bold. Powerful. Bring the thunder.",
-    productHandle: "thunderr"
+    tagline: "Loud. Fearless. Built to dominate.",
+    productHandle: "thunder-strike"
   },
 ];
 
@@ -61,7 +61,7 @@ const GloveContext = createContext<GloveContextType | undefined>(undefined);
 
 export const GloveProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [activeGlove, setActiveGlove] = useState(0);
-  
+
   const currentGlove = gloveDetails[activeGlove];
 
   return (
