@@ -109,3 +109,20 @@ export const WORKER_MODE =
  * Disable Admin
  */
 export const SHOULD_DISABLE_ADMIN = process.env.MEDUSA_DISABLE_ADMIN === 'true'
+
+/**
+ * (optional) USPS live shipping rates.
+ * USPS_CLIENT_ID/SECRET are the consumer key/secret from developers.usps.com.
+ * USPS_ORIGIN_ZIP is the ZIP code you ship from. All three are required to
+ * enable the USPS fulfillment provider.
+ */
+export const USPS_CLIENT_ID = process.env.USPS_CLIENT_ID
+export const USPS_CLIENT_SECRET = process.env.USPS_CLIENT_SECRET
+export const USPS_ORIGIN_ZIP = process.env.USPS_ORIGIN_ZIP
+export const USPS_PRICE_TYPE = process.env.USPS_PRICE_TYPE ?? 'RETAIL'
+export const USPS_WEIGHT_UNIT =
+  (process.env.USPS_WEIGHT_UNIT as 'g' | 'oz' | 'lb' | undefined) ?? 'g'
+export const USPS_BASE_URL = process.env.USPS_BASE_URL
+export const USPS_DEFAULT_ITEM_WEIGHT = process.env.USPS_DEFAULT_ITEM_WEIGHT
+  ? Number(process.env.USPS_DEFAULT_ITEM_WEIGHT)
+  : undefined

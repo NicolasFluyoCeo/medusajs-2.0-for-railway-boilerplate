@@ -21,7 +21,14 @@ import {
   MINIO_SECRET_KEY,
   MINIO_BUCKET,
   MEILISEARCH_HOST,
-  MEILISEARCH_ADMIN_KEY
+  MEILISEARCH_ADMIN_KEY,
+  USPS_CLIENT_ID,
+  USPS_CLIENT_SECRET,
+  USPS_ORIGIN_ZIP,
+  USPS_PRICE_TYPE,
+  USPS_WEIGHT_UNIT,
+  USPS_BASE_URL,
+  USPS_DEFAULT_ITEM_WEIGHT
 } from 'lib/constants';
 
 loadEnv(process.env.NODE_ENV, process.cwd());
@@ -128,7 +135,34 @@ const medusaConfig = {
           },
         ],
       },
-    }] : [])
+    }] : []),
+    {
+      key: Modules.FULFILLMENT,
+      resolve: '@medusajs/fulfillment',
+      options: {
+        providers: [
+          // Keep the built-in manual provider for flat-rate / free shipping.
+          {
+            resolve: '@medusajs/fulfillment-manual',
+            id: 'manual'
+          },
+          // USPS live rates — only enabled when credentials + origin ZIP are set.
+          ...(USPS_CLIENT_ID && USPS_CLIENT_SECRET && USPS_ORIGIN_ZIP ? [{
+            resolve: './src/modules/usps-fulfillment',
+            id: 'usps',
+            options: {
+              clientId: USPS_CLIENT_ID,
+              clientSecret: USPS_CLIENT_SECRET,
+              originZip: USPS_ORIGIN_ZIP,
+              priceType: USPS_PRICE_TYPE,
+              weightUnit: USPS_WEIGHT_UNIT,
+              baseUrl: USPS_BASE_URL,
+              defaultItemWeight: USPS_DEFAULT_ITEM_WEIGHT
+            }
+          }] : [])
+        ]
+      }
+    }
   ],
   plugins: [
   ...(MEILISEARCH_HOST && MEILISEARCH_ADMIN_KEY ? [{
